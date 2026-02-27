@@ -1,6 +1,6 @@
 [project]
 name = "module-runner"
-version = "0.1.0"
+version = "0.1.1"
 description = "Lightweight helper that prepares Python environments and executes standalone modules."
 authors = [{name = "Leo Jaimesson"}]
 readme = "README.md"
