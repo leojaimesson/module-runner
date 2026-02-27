@@ -130,8 +130,7 @@ Use this folder as a template to create your own modules or to test different de
 git clone https://github.com/<seu-usuario>/module_runner.git
 cd module_runner
 python -m venv .venv && source .venv/bin/activate
-pip install -e .[dev]
-pytest
+pip install -e .
 ```
 
 Feel free to open issues or pull requests with improvements. The scope intentionally stays small: reliable environment setup and process execution.
