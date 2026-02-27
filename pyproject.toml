@@ -7,6 +7,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 
+[tool.setuptools.packages.find]
+include = ["module_runner*"]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
