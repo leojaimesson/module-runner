@@ -127,7 +127,7 @@ Use this folder as a template to create your own modules or to test different de
 ## Development
 
 ```bash
-git clone https://github.com/<seu-usuario>/module_runner.git
+git clone https://github.com/leojaimesson/module-runner.git
 cd module_runner
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
