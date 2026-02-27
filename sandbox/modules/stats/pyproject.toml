@@ -1,0 +1,7 @@
+[project]
+name = "sandbox-stats-module"
+version = "0.1.0"
+description = "Modulo de estatisticas para o Runner sandbox"
+dependencies = [
+    "numpy>=1.26,<2.0",
+]
