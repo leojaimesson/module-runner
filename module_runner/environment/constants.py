@@ -6,3 +6,5 @@ VENV_DIR = ".venv"
 PACKAGE_JSON = "package.json"
 MAIN_JS = "main.js"
 NODE_MODULES_DIR = "node_modules"
+
+MAIN_SH = "main.sh"

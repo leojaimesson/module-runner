@@ -1,7 +1,7 @@
 from importlib.metadata import version, PackageNotFoundError
 
 from .runners import (
-    NodeRunner, PythonRunner,
+    NodeRunner, PythonRunner, ShellRunner,
     UvPackageManager, PipPackageManager, SystemPackageManager,
     NpmPackageManager, YarnPackageManager, PnpmPackageManager,
 )
@@ -16,6 +16,7 @@ except PackageNotFoundError:
 __all__ = [
     "NodeRunner",
     "PythonRunner",
+    "ShellRunner",
     "UvPackageManager",
     "PipPackageManager",
     "SystemPackageManager",

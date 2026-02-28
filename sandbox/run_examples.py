@@ -7,7 +7,7 @@ root = str(Path(__file__).parent.parent.absolute())
 if root not in sys.path:
     sys.path.insert(0, root)
 
-from module_runner import NodeRunner, PythonRunner, UvPackageManager, SystemPackageManager, PnpmPackageManager
+from module_runner import NodeRunner, PythonRunner, ShellRunner, UvPackageManager, SystemPackageManager, PnpmPackageManager
 
 MODULES_PATH = Path(__file__).parent / "modules"
 
@@ -54,9 +54,16 @@ def run_node_script() -> None:
     print("Greet via npm script stdout:\n", process.stdout.strip())
 
 
+def run_shell_module() -> None:
+    runner = ShellRunner(module_path=MODULES_PATH / "greet_shell")
+    process = runner.run(payload={"name": "Module Runner"})
+    print("Greet (shell) stdout:\n", process.stdout.strip())
+
+
 if __name__ == "__main__":
     run_system_module()
     run_single_module()
     manual_chaining()
     run_node_module()
     run_node_script()
+    run_shell_module()
