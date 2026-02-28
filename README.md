@@ -6,7 +6,7 @@ Module Runner sits in the gap between ad-hoc scripts and heavyweight orchestrati
 
 ## Features
 
-- 🎯 **Explicit runners**: choose `PythonRunner` or `NodeRunner` — no hidden detection logic.
+- 🎯 **Explicit runners**: choose `PythonRunner`, `NodeRunner`, or `ShellRunner` — no hidden detection logic.
 - 📦 **Swappable package managers**: plug in `UvPackageManager`, `PipPackageManager`, `NpmPackageManager`, `YarnPackageManager`, `PnpmPackageManager`, or `SystemPackageManager`.
 - 🧱 **Opinionated boundary**: no implicit payload chaining — what a module prints or writes is entirely up to you.
 - 🛡️ **Atomic workflows**: fail fast, clear error surfaces, and easy cleanup — each module runs in its own isolated process.
@@ -84,7 +84,17 @@ print(process.stdout)
 
 > If no `package_manager` is specified, `NpmPackageManager` is used by default for Node.js modules.
 
-The payload is serialized as JSON and appended as the last CLI argument (or after `--` for npm/pnpm scripts). How you read and emit results inside the module is entirely up to you.
+### Shell script module
+
+```python
+from module_runner import ShellRunner
+
+runner = ShellRunner(module_path="modules/greet_shell")
+process = runner.run(payload={"name": "Alice"})
+print(process.stdout)
+```
+
+The payload is serialized as JSON and passed as `$1` inside the script. The default entrypoint is `main.sh`. By default `bash` is tried first, falling back to `sh`. You can pin a specific shell with the `shell` parameter (`"bash"` or `"sh"`).
 
 ## Python Package Managers
 
@@ -102,6 +112,30 @@ PythonRunner(module_path="modules/normalize", package_manager=PipPackageManager(
 
 # system interpreter, no setup
 PythonRunner(module_path="modules/report", package_manager=SystemPackageManager())
+```
+
+## Shell Runner
+
+```python
+from module_runner import ShellRunner
+
+# auto-detect shell (bash → sh)
+ShellRunner(module_path="modules/greet_shell")
+
+# pin to sh
+ShellRunner(module_path="modules/greet_shell", shell="sh")
+
+# custom entrypoint
+ShellRunner(module_path="modules/greet_shell", entrypoint="run.sh")
+```
+
+The shell module receives the JSON payload as `$1`. Reading it is plain shell — no runtime dependencies required:
+
+```sh
+#!/bin/sh
+PAYLOAD="${1:-{}}"
+NAME=$(echo "$PAYLOAD" | sed 's/.*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+printf '{"message": "Hello, %s!"}\n' "$NAME"
 ```
 
 ## Node.js Package Managers
@@ -133,8 +167,10 @@ modules/
 ├── greet/              # Node.js
 │   ├── main.js
 │   └── package.json
-└── report/             # System Python, no deps
-    └── main.py
+├── report/             # System Python, no deps
+│   └── main.py
+└── greet_shell/        # Shell script
+    └── main.sh
 ```
 
 ## Sandbox Playground
