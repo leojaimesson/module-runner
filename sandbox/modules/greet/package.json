@@ -1,0 +1,12 @@
+{
+  "name": "greet",
+  "version": "1.0.0",
+  "description": "Simple greeting module for module_runner sandbox",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "ms": "^2.1.3"
+  }
+}
