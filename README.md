@@ -2,7 +2,7 @@
 
 **Explicit, isolated task execution for Python and Node.js.**
 
-Module Runner sits in the gap between ad-hoc scripts and heavyweight orchestration frameworks. You explicitly choose the runner and the package manager for each module — no magic auto-detection, no hidden behavior. What you read is exactly what runs.
+Module Runner sits in the gap between ad-hoc scripts and heavyweight orchestration frameworks. You explicitly choose the runner and the package manager for each module. What you read is exactly what runs.
 
 ## Features
 
