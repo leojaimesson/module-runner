@@ -1,34 +1,44 @@
 # Sandbox Examples
 
-This directory illustrates how to use Module Runner's `Runner` class to execute isolated modules. Any communication between modules is your responsibility (stdout parsing, temp files, queues, etc.).
+This directory illustrates how to use Module Runner with explicit runners and package managers. Any communication between modules (stdout parsing, temp files, queues, etc.) is your responsibility.
 
 ## Layout
 
-- `modules/system_report/` – no `requirements.txt` or `pyproject.toml`, so it runs with the system interpreter and prints host metadata.
-- `modules/normalize/` – trims, lowercases, and removes diacritics from the `text` field (depends on `text-unidecode`).
-- `modules/stats/` – computes simple metrics with `numpy`, showcasing a module driven by `pyproject.toml`/`uv`.
-- `run_examples.py` – script with standalone executions plus a manual chaining example that reuses stdout.
-
-## Module Dependencies
-
-- Modules with `requirements.txt` (e.g., `modules/normalize/`) are provisioned using `uv` when available (`uv venv` + `uv pip install -r`), falling back to `venv`/`pip` otherwise.
-- Modules with `pyproject.toml` (e.g., `modules/stats/`) run through `uv run`, so dependencies are resolved automatically without a separate `venv`.
-
-If `uv` is missing from `PATH` or the running Python lacks `venv` support, Module Runner raises a descriptive `RuntimeError` explaining that declared dependencies cannot be provisioned automatically.
+- `modules/system_report/` — no dependencies, runs with `SystemPackageManager` (current interpreter).
+- `modules/normalize/` — trims, lowercases, and removes diacritics from the `text` field (depends on `text-unidecode`), runs with `UvPackageManager`.
+- `modules/stats/` — computes simple metrics with `numpy` via `pyproject.toml`, runs with `UvPackageManager`.
+- `modules/greet/` — Node.js greeting module, runs with `NodeRunner` (entrypoint or `script`).
+- `run_examples.py` — standalone executions, manual chaining, and a Node.js script example.
 
 ## Requirements
 
 - Python 3.9+
-- Project dependencies installed (e.g., `pip install -e .`).
+- Project dependencies installed (`pip install -e .`)
+- `uv` in PATH for `UvPackageManager` examples
+- `node` and `npm` in PATH for Node.js examples
 
 ## Usage
 
-1. From the repository root, run:
+```bash
+python sandbox/run_examples.py
+```
 
-   ```bash
-   python sandbox/run_examples.py
-   ```
+## Examples
 
-2. Inspect the terminal output. The script first runs `system_report` using the current interpreter, then shows a virtual-environment-backed module, and finally demonstrates manual chaining with the `stats` module.
+```python
+from module_runner import PythonRunner, NodeRunner
+from module_runner import UvPackageManager, SystemPackageManager
 
-Feel free to duplicate modules in `sandbox/modules/` to explore other scenarios (e.g., `pyproject.toml` for `uv`, `requirements.txt` for dedicated virtual environments).
+# system interpreter, no deps
+PythonRunner(module_path="modules/system_report", package_manager=SystemPackageManager())
+
+# uv-managed environment
+PythonRunner(module_path="modules/normalize", package_manager=UvPackageManager())
+
+# Node.js via entrypoint
+NodeRunner(module_path="modules/greet")
+
+# Node.js via package.json script
+NodeRunner(module_path="modules/greet", script="start")
+```
+
