@@ -1,6 +1,6 @@
 [project]
 name = "module-runner"
-version = "0.1.1"
+version = "0.2.0"
 description = "Explicit, isolated task execution for Python and Node.js modules with swappable package managers."
 authors = [{name = "Leo Jaimesson"}]
 readme = "README.md"
